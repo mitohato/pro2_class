@@ -22,7 +22,7 @@ int main(void)
   while (1){
     if (sel == 11) break;
     disp(SENTE, sel);
-    sel = sol(GOTE, sel);
+    sel = AI39GO(GOTE, sel);
     printf("%d\n", sel);
 
     if (check()) {

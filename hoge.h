@@ -14,3 +14,5 @@
 void init_table(void);
 void disp(int player, int no);
 int select(int player, int no);
+int check(void);
+int AI39GO(int player, int no);
