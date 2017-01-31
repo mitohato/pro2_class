@@ -138,50 +138,20 @@ int select(int player, int no)
   return (num);
 }
 
-int sol(int player, int no)
+int AI39GO(int player, int no)
 {
-  int ch[8], f[8] = {0};
-  int i, j, k, p = 0, max = NO_VALUE, pos = 0, tmp, pos1;
-  int min = -NO_VALUE;
+  int max = NO_VALUE, i, j, pos;
   for (i = 0; i < SIZE; i++){
-    if (table[i][no] == NO_VALUE){
-      continue;
-    }
     if (max < table[i][no]){
       max = table[i][no];
       pos = i;
-      // ch[p++] = i;
     }
   }
-  for (i = 0; i < SIZE; i++){
-    if (table[i][no] == NO_VALUE){
-      continue;
-    }
-    if (max == table[i][no]){
-      ch[p++] = i;
-    }
-  }
-  for (i = 0; i < p; i++){
-    tmp = -NO_VALUE;
-    for (j = 0; j < 8; j++){
-      if (table[ch[i]][j] == NO_VALUE || no == j){
-        continue;
-      }
-      if (tmp < table[ch[i]][j]){
-        tmp = table[ch[i]][j];
-        // pos1 = ch[i];
-        f[ch[i]] = tmp;
-      }
-    }
-  }
-  for (i = 0; i < p; i++){
-    
-  }
-  table[pos1][no] = NO_VALUE;
-  line[pos1]--;
+  table[pos][no] = NO_VALUE;
+  line[pos]--;
   columm[no]--;
   score[player] += max;
-  return (pos1);
+  return (pos);
 }
 
 int check(void)
