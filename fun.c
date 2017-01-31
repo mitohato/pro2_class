@@ -140,18 +140,38 @@ int select(int player, int no)
 
 int AI39GO(int player, int no)
 {
-  int max = NO_VALUE, i, j, pos;
+  int max = NO_VALUE, i, j, pos[10];
+  int ct = 0, min = -NO_VALUE, pos1;
   for (i = 0; i < SIZE; i++){
     if (max < table[i][no]){
       max = table[i][no];
-      pos = i;
+      pos1 = i;
     }
   }
-  table[pos][no] = NO_VALUE;
-  line[pos]--;
+  for (i = 0; i < SIZE; i++){
+    if (max == table[i][no]){
+      pos[ct++] = i;
+    }
+  }
+  if (1 < ct){
+    for (i = 0; i < ct; i++){
+      int tmp = 0;
+      for (j = 0; j < SIZE; j++){
+        if (table[pos[i]][j] == NO_VALUE) continue;
+        tmp += table[pos[i]][j];
+      }
+      printf("%d\n", tmp);
+      if (tmp < min){
+        min = tmp;
+        pos1 = pos[i];
+      }
+    }
+  }
+  table[pos1][no] = NO_VALUE;
+  line[pos1]--;
   columm[no]--;
   score[player] += max;
-  return (pos);
+  return (pos1);
 }
 
 int check(void)
