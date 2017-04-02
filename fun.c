@@ -1,18 +1,18 @@
 #include "hoge.h"
 
-extern table[SIZE][SIZE];
+extern Table[SIZE][SIZE];
 extern score[2];
 extern line[SIZE];
 extern columm[SIZE];
 
-void init_table(void)
+void init_Table(void)
 {
   int i, j;
   score[SENTE] = 0;
   score[GOTE] = 0;
   for(i = 0; i < SIZE; i++){
     for (j = 0; j < SIZE; j++){
-      table[i][j] = rand() % 19 - 9;
+      Table[i][j] = rand() % 19 - 9;
     }
   }
 }
@@ -57,11 +57,11 @@ void disp(int player, int no)
       printf(" ");
     }
     for (j = 0; j < SIZE; j++){
-      if (table[i][j] == NO_VALUE){
+      if (Table[i][j] == NO_VALUE){
         printf(" **");
       }
       else {
-        printf("%3d", table[i][j]);
+        printf("%3d", Table[i][j]);
       }
     }
     if (abs(player) == 1 && i == no){
@@ -114,7 +114,7 @@ int select(int player, int no)
     printf(">>");
     fgets(buf, sizeof(buf), stdin);
     sscanf(buf, "%d", &num);
-    if (((player == 0 && table[no][num] != NO_VALUE) || (player == 1 && table[num][no] != NO_VALUE)) && 0 <= num && num <= 7){
+    if (((player == 0 && Table[no][num] != NO_VALUE) || (player == 1 && Table[num][no] != NO_VALUE)) && 0 <= num && num <= 7){
       break;
     }
     else {
@@ -122,14 +122,14 @@ int select(int player, int no)
     }
   }
   // if (player == 0){
-  m = table[no][num];
-  table[no][num] = NO_VALUE;
+  m = Table[no][num];
+  Table[no][num] = NO_VALUE;
   line[no]--;
   columm[num]--;
   // }
   // else if (player == 1){
-  //   m = table[num][no];
-  //   table[num][no] = NO_VALUE;
+  //   m = Table[num][no];
+  //   Table[num][no] = NO_VALUE;
   //   line[num]--;
   //   columm[no]--;
   
@@ -138,39 +138,49 @@ int select(int player, int no)
   return (num);
 }
 
+int AI(int player, int no)
+{
+  int max = NO_VALUE, i, j, pos;
+  int ct = 0, min = -NO_VALUE, pos1;
+  for (i = 0; i < SIZE; i++){
+    if (max < Table[no][i]){
+      max = Table[no][i];
+      pos = i;
+    }
+  }
+  score[player] += Table[no][pos];
+  Table[no][pos] = NO_VALUE;
+  line[no]--;
+  columm[pos]--;
+  return (pos);
+}
+
 int AI39GO(int player, int no)
 {
   int max = NO_VALUE, i, j, pos[10];
   int ct = 0, min = -NO_VALUE, pos1;
+  int m = NO_VALUE;
   for (i = 0; i < SIZE; i++){
-    if (max < table[i][no]){
-      max = table[i][no];
+    if (Table[i][no] == NO_VALUE){
+      continue;
+    }
+    for (j = 0; j < SIZE; j++){
+      if (no == j){
+        continue;
+      }
+      if (max < Table[i][j]){
+        max = Table[i][j];
+      }
+    }
+    if (m < Table[i][no] - max){
+      m = Table[i][no] - max;
       pos1 = i;
     }
   }
-  for (i = 0; i < SIZE; i++){
-    if (max == table[i][no]){
-      pos[ct++] = i;
-    }
-  }
-  if (1 < ct){
-    for (i = 0; i < ct; i++){
-      int tmp = 0;
-      for (j = 0; j < SIZE; j++){
-        if (table[pos[i]][j] == NO_VALUE) continue;
-        tmp += table[pos[i]][j];
-      }
-      printf("%d\n", tmp);
-      if (tmp < min){
-        min = tmp;
-        pos1 = pos[i];
-      }
-    }
-  }
-  table[pos1][no] = NO_VALUE;
+  score[player] += Table[pos1][no];
+  Table[pos1][no] = NO_VALUE;
   line[pos1]--;
   columm[no]--;
-  score[player] += max;
   return (pos1);
 }
 

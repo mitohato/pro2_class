@@ -11,8 +11,9 @@
 #define NO_VALUE -999   //取得済み箇所
 
 //プロトタイプ宣言
-void init_table(void);
+void init_Table(void);
 void disp(int player, int no);
 int select(int player, int no);
 int check(void);
 int AI39GO(int player, int no);
+int donyoku2(int player, int no);
